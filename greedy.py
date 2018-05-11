@@ -76,11 +76,13 @@ class RGF:
             la_encoder_test = LabelEncoder()
             self.y_test = pd.Series(la_encoder_test.fit_transform(self.y_test))
 
-    def tune(self, grid):
+    def tune(self, grid, folds=5, cores=4):
         """
         Method for parameter optimization via grid search
 
         :param grid: dict of parameters
+        :param folds: number of CV folds
+        :param cores: number of cores to use
         :return: None
         """
 
@@ -88,8 +90,8 @@ class RGF:
         self.grid_search = GridSearchCV(estimator=self.model,
                                         param_grid=grid,
                                         scoring=self.metric,
-                                        cv=5,
-                                        n_jobs=4,
+                                        cv=folds,
+                                        n_jobs=cores,
                                         verbose=2)
 
         # Run CV
@@ -97,7 +99,7 @@ class RGF:
 
     def score(self):
         """
-        Method for scoring test dataset
+        Method for scoring test data set
 
         :return: None
         """
