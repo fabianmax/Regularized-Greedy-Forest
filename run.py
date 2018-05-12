@@ -11,11 +11,25 @@ files = [{"train": "../data/01_c_skin_train.csv", "test": "../data/01_c_skin_tes
 # max_leaf: Maximum number of leaf nodes in forest
 # algorithm: RGF = L2 regularization on leaf-only models,
 #            RGF_Opt = Min-penalty regularization
-#            RGF_Sod = Min-penalty regularization with sum-to-zero sibling constrains
+#            RGF_Sid = Min-penalty regularization with sum-to-zero sibling constrains
 # l2: degree of L2 regularization
-param_grid = {'max_leaf': [1000, 5000, 10000],
-              'algorithm': ['RGF', 'RGF_Opt', 'RGF_Sib'],
-              'l2': [1.0, 0.1, 0.01]}
+param_grid_normal = {'max_leaf': [1000, 5000, 10000],
+                     'algorithm': ['RGF_Sib'],
+                     'l2': [1.0, 0.1, 0.01]}
+
+# n_estimators: The number of trees in the forest
+# l1: L1 regularization
+# l2: L2 regularization
+param_grid_fast = {'n_estimators': [1000, 5000, 10000],
+                   'l1': [0.0, 1.0, 10.0],
+                   'l2': [1000.0]}
+
+# Use fast implementation?
+use_fast = True
+if use_fast:
+    param_grid = param_grid_fast
+else:
+    param_grid = param_grid_normal
 
 # Results container
 results = []
@@ -32,13 +46,13 @@ for case in files:
     start_time = time.time()
 
     # Model
-    mod = RGF(task=case["task"])
+    mod = RGF(task=case["task"], fast=use_fast)
 
     # Load data
     mod.load_data(path_train=case["train"], path_test=case["test"])
 
-    # Tune model
-    mod.tune(grid=param_grid)
+    # Tune model (5-fold CV)
+    mod.tune(grid=param_grid, folds=5, cores=5)
 
     # Score on test
     mod.score()

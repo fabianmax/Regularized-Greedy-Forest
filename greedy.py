@@ -5,7 +5,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import roc_auc_score, mean_squared_error
 from sklearn.preprocessing import LabelEncoder
 
-from rgf.sklearn import RGFClassifier, RGFRegressor
+from rgf.sklearn import RGFClassifier, RGFRegressor, FastRGFClassifier, FastRGFRegressor
 
 
 class RGF:
@@ -20,17 +20,30 @@ class RGF:
     task: string ("classification", "regression")
         Either regression of classification task
 
+    fast: bool
+        Should Fast RGF implemented be used?
+
+    # To Dos
+    ----------
+    - Check verbose option
+
     """
 
-    def __init__(self, task):
+    def __init__(self, task, fast=False):
         if task == 'classification':
-            self.model = RGFClassifier(loss="Log")
             self.metric = 'roc_auc'
             self.task = "classification"
+            if fast:
+                self.model = FastRGFClassifier()
+            else:
+                self.model = RGFClassifier(loss="Log")
         else:
-            self.model = RGFRegressor(loss="LS", normalize=True)
             self.metric = 'neg_mean_squared_error'
             self.task = "regression"
+            if fast:
+                self.model = FastRGFRegressor()
+            else:
+                self.model = RGFRegressor(loss="LS", normalize=True)
         self.X_test = None
         self.X_train = None
         self.y_test = None
