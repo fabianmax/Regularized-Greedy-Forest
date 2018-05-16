@@ -1,4 +1,6 @@
 import time
+import json
+import io
 from greedy import RGF
 
 # Files
@@ -20,7 +22,7 @@ param_grid_normal = {'max_leaf': [1000, 5000, 10000],
 # n_estimators: The number of trees in the forest
 # l1: L1 regularization
 # l2: L2 regularization
-param_grid_fast = {'n_estimators': [1000, 5000, 10000],
+param_grid_fast = {'n_estimators': [1000],
                    'l1': [0.0, 1.0, 10.0],
                    'l2': [1000.0]}
 
@@ -67,3 +69,7 @@ for case in files:
             "metric": mod.metric,
             "time": time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))}
     results.append(info)
+
+# Save results to json
+with open("../models/" + time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime(time.time())) + "_rgf_model.json", "w") as outfile:
+    json.dump(results, outfile, sort_keys=True, indent=4)
