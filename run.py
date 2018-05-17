@@ -1,6 +1,5 @@
 import time
 import json
-import io
 from greedy import RGF
 
 # Files
@@ -63,6 +62,7 @@ for case in files:
     info = {"train": case["train"],
             "test": case["test"],
             "task": case["task"],
+            "all_param": param_grid,
             "opt_param": mod.grid_search.best_params_,
             "cv_score": mod.grid_search.best_score_,
             "test_score": mod.test_score,
@@ -70,6 +70,6 @@ for case in files:
             "time": time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time))}
     results.append(info)
 
-# Save results to json
+# Save model results to json
 with open("../models/" + time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime(time.time())) + "_rgf_model.json", "w") as outfile:
     json.dump(results, outfile, sort_keys=True, indent=4)
