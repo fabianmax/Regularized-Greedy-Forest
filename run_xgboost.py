@@ -8,8 +8,9 @@ files = [{"train": "../data/01_c_skin_train.csv", "test": "../data/01_c_skin_tes
          {"train": "../data/02_r_bike_train.csv", "test": "../data/02_r_bike_test.csv", "task": "regression"},
          {"train": "../data/03_r_gas_train.csv", "test": "../data/03_r_gas_test.csv", "task": "regression"}]
 
-# XGB Grids
-# n_estimators: The number of trees in the forest
+# XGB Grid
+# n_estimators: Number of boosted trees to fit
+# max_depth: Maximum tree depth for base learners
 # l1: L1 regularization
 # l2: L2 regularization
 param_grid = {'n_estimators': [100, 250, 500],
