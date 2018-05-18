@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import roc_auc_score, mean_squared_error
@@ -11,8 +10,8 @@ from rgf.sklearn import RGFClassifier, RGFRegressor, FastRGFClassifier, FastRGFR
 class RGF:
 
     """
-    Wrapper for Regularized Greedy Forest
-    based on RGFClassifier (classification) and RGFRegressor (regression)
+    Wrapper for (Fast) Regularized Greedy Forest
+    based on RGFClassifier/FastRGFClassifier (classification) and RGFRegressor/FastRGFRegressor (regression)
     https://github.com/RGF-team/rgf_python
 
     Parameters
@@ -25,7 +24,7 @@ class RGF:
 
     # To Dos
     ----------
-    - Check verbose option
+    - Implement random search
 
     """
 
@@ -105,7 +104,7 @@ class RGF:
                                         scoring=self.metric,
                                         cv=folds,
                                         n_jobs=cores,
-                                        verbose=2)
+                                        verbose=3)
 
         # Run CV
         self.grid_search.fit(X=self.X_train, y=self.y_train)
@@ -124,4 +123,4 @@ class RGF:
         if self.task == 'classification':
             self.test_score = roc_auc_score(y_true=self.y_test, y_score=self.y_predict)
         else:
-            self.test_score = np.sqrt(mean_squared_error(y_true=self.y_test, y_pred=self.y_predict))
+            self.test_score = mean_squared_error(y_true=self.y_test, y_pred=self.y_predict)

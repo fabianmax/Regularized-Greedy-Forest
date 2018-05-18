@@ -8,7 +8,7 @@ files = [{"train": "../data/01_c_skin_train.csv", "test": "../data/01_c_skin_tes
          {"train": "../data/02_r_bike_train.csv", "test": "../data/02_r_bike_test.csv", "task": "regression"},
          {"train": "../data/03_r_gas_train.csv", "test": "../data/03_r_gas_test.csv", "task": "regression"}]
 
-# Grid
+# RGF Grids
 # max_leaf: Maximum number of leaf nodes in forest
 # algorithm: RGF = L2 regularization on leaf-only models,
 #            RGF_Opt = Min-penalty regularization
@@ -21,11 +21,11 @@ param_grid_normal = {'max_leaf': [1000, 5000, 10000],
 # n_estimators: The number of trees in the forest
 # l1: L1 regularization
 # l2: L2 regularization
-param_grid_fast = {'n_estimators': [1000],
+param_grid_fast = {'n_estimators': [500, 1000, 2500],
                    'l1': [0.0, 1.0, 10.0],
-                   'l2': [1000.0]}
+                   'l2': [100.0, 1000.0, 10000.0]}
 
-# Use fast implementation?
+# Use fast RGF implementation?
 use_fast = True
 if use_fast:
     param_grid = param_grid_fast
@@ -35,10 +35,12 @@ else:
 # Results container
 results = []
 
-# Run models
+# Run RGF models
 for case in files:
 
     # Status
+    print("   ")
+    print("   ")
     print("Starting training (" + str(case["task"]) + ")")
     print("     Training file: " + str(case["train"]))
     print("     Test file: " + str(case["test"]))
