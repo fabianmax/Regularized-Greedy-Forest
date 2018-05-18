@@ -12,7 +12,7 @@ files = [{"train": "../data/01_c_skin_train.csv", "test": "../data/01_c_skin_tes
 # n_estimators: The number of trees in the forest
 # l1: L1 regularization
 # l2: L2 regularization
-param_grid = {'n_estimators': [50, 100, 250, 500],
+param_grid = {'n_estimators': [100, 250, 500],
               'max_depth': [3, 6, 9],
               'reg_alpha': [0.0, 0.1, 1.0, 10.0],
               'reg_lambda': [0.0, 0.1, 1.0, 10.0]}
