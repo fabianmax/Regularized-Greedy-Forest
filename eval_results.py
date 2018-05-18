@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Path to model json files
 model_path_rgf = "../models/2018-05-18_00-49-00_rgf_model.json"
@@ -32,8 +34,16 @@ results_rgf = pd.DataFrame({
 
 # And combine
 results = pd.concat([results_xgb, results_rgf]).sort_values(by="dataset")
+results["title"] = results["dataset"] + str(" (") + results["task"] + str(")")
 
-
-
+# Plot performance
+p = sns.FacetGrid(results, col="title", sharey=False)
+p = (p.map(sns.barplot, "model", "test_score")).set_titles("{col_name}")
+p.axes[0, 0].set_ylabel("Test Metric")
+p.axes[0, 0].set_xlabel("")
+p.axes[0, 1].set_xlabel("")
+p.axes[0, 2].set_xlabel("")
+p.axes[0, 3].set_xlabel("")
+plt.show()
 
 
