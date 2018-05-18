@@ -37,7 +37,7 @@ class RGF:
             else:
                 self.model = RGFClassifier(loss="Log")
         else:
-            self.metric = 'neg_mean_squared_error'
+            self.metric = 'mean_squared_error'
             self.task = "regression"
             if fast:
                 self.model = FastRGFRegressor()

@@ -34,7 +34,7 @@ class XGB:
             self.task = "classification"
             self.model = XGBClassifier()
         else:
-            self.metric = 'neg_mean_squared_error'
+            self.metric = 'mean_squared_error'
             self.task = "regression"
             self.model = XGBRegressor()
         self.X_test = None
