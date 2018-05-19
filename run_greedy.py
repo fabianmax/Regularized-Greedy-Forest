@@ -1,6 +1,7 @@
 import time
 import json
 from greedy import RGF
+from numpy.random import randint
 
 # Files
 files = [{"train": "../data/01_c_skin_train.csv", "test": "../data/01_c_skin_test.csv", "task": "classification"},
@@ -18,19 +19,29 @@ param_grid_normal = {'max_leaf': [1000, 5000, 10000],
                      'algorithm': ['RGF_Sib'],
                      'l2': [1.0, 0.1, 0.01]}
 
+param_dist = {'max_leaf': randint(1000, 10000),
+              'algorithm': ['RGF', 'RGF_Sib', 'RGF_Opt'],
+              'l2': [1.0, 0.1, 0.01]}
+
 # n_estimators: The number of trees in the forest
 # l1: L1 regularization
 # l2: L2 regularization
 param_grid_fast = {'n_estimators': [500, 1000, 2500],
                    'l1': [0.0, 1.0, 10.0],
-                   'l2': [100.0, 1000.0, 10000.0]}
+                   'l2': [100.0, 1000.0]}
 
 # Use fast RGF implementation?
-use_fast = True
+use_fast = False
 if use_fast:
     param_grid = param_grid_fast
 else:
     param_grid = param_grid_normal
+
+# Use random search?
+use_random = False
+n_random_params = 30
+if use_random:
+    param_grid = param_dist
 
 # Results container
 results = []
@@ -55,7 +66,7 @@ for case in files:
     mod.load_data(path_train=case["train"], path_test=case["test"])
 
     # Tune model (5-fold CV)
-    mod.tune(grid=param_grid, folds=5, cores=5)
+    mod.tune(grid=param_grid, random=use_random, n_iter=n_random_params, folds=5, cores=5)
 
     # Score on test
     mod.score()

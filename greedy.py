@@ -1,6 +1,6 @@
 import pandas as pd
 
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import roc_auc_score, mean_squared_error
 from sklearn.preprocessing import LabelEncoder
 
@@ -24,7 +24,7 @@ class RGF:
 
     # To Dos
     ----------
-    - Implement random search
+    - ...
 
     """
 
@@ -37,7 +37,7 @@ class RGF:
             else:
                 self.model = RGFClassifier(loss="Log")
         else:
-            self.metric = 'mean_squared_error'
+            self.metric = 'neg_mean_squared_error'
             self.task = "regression"
             if fast:
                 self.model = FastRGFRegressor()
@@ -88,25 +88,39 @@ class RGF:
             la_encoder_test = LabelEncoder()
             self.y_test = pd.Series(la_encoder_test.fit_transform(self.y_test))
 
-    def tune(self, grid, folds=5, cores=4):
+    def tune(self, grid, random=False, n_iter=10, folds=5, cores=4):
         """
         Method for parameter optimization via grid search
 
         :param grid: dict of parameters
+        :param random: boolean if random search should be used
+        :param n_iter: int for number of parameter settings in random search
         :param folds: number of CV folds
         :param cores: number of cores to use
         :return: None
         """
 
         # CV object
-        self.grid_search = GridSearchCV(estimator=self.model,
-                                        param_grid=grid,
-                                        scoring=self.metric,
-                                        cv=folds,
-                                        n_jobs=cores,
-                                        verbose=3)
 
-        # Run CV
+        # Random search
+        if random:
+            self.grid_search = RandomizedSearchCV(estimator=self.model,
+                                                  param_distributions=grid,
+                                                  n_iter=n_iter,
+                                                  scoring=self.metric,
+                                                  cv=folds,
+                                                  n_jobs=cores,
+                                                  verbose=3)
+        # Grid search
+        else:
+            self.grid_search = GridSearchCV(estimator=self.model,
+                                            param_grid=grid,
+                                            scoring=self.metric,
+                                            cv=folds,
+                                            n_jobs=cores,
+                                            verbose=3)
+
+        # Run search
         self.grid_search.fit(X=self.X_train, y=self.y_train)
 
     def score(self):

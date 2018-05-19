@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Path to model json files
-model_path_rgf = "../models/2018-05-18_00-49-00_rgf_model.json"
+model_path_rgf = "../models/2018-05-18_23-58-01_rgf_model.json"
 model_path_xgb = "../models/2018-05-18_18-39-01_xgb_model.json"
 
 # Open model results
