@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Path to model json files
-model_path_rgf = "../models/2018-05-18_23-58-01_rgf_model.json"
+model_path_rgf = "../models/2018-05-20_00-05-49_rgf_model.json"
 model_path_xgb = "../models/2018-05-18_18-39-01_xgb_model.json"
 
 # Open model results
@@ -45,5 +45,4 @@ p.axes[0, 1].set_xlabel("")
 p.axes[0, 2].set_xlabel("")
 p.axes[0, 3].set_xlabel("")
 plt.show()
-
 
