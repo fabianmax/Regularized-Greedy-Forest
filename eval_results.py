@@ -34,7 +34,8 @@ results_rgf = pd.DataFrame({
 
 # And combine
 results = pd.concat([results_xgb, results_rgf]).sort_values(by="dataset")
-results["title"] = results["dataset"] + str(" (") + results["task"] + str(")")
+results["title"] = results["dataset"] + str(" (") + np.where(results["task"] == "classification", "AUC", "MSE") + str(")")
+
 
 # Plot performance
 p = sns.FacetGrid(results, col="title", sharey=False)
